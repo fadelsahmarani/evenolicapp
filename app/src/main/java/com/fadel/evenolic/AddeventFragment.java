@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -36,15 +37,16 @@ import static android.app.Activity.RESULT_OK;
 public class AddeventFragment extends Fragment {
     ImageView viewImage;
     Button b;
-    public AddeventFragment(){
+
+    public AddeventFragment() {
 
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_addevent,container,false);
+        View view = inflater.inflate(R.layout.fragment_addevent, container, false);
         //showKeyboard(getActivity());
-
         return view;
     }
 
@@ -53,13 +55,18 @@ public class AddeventFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        EditText etUsername=view.findViewById(R.id.etUsername);
-        /*etUsername.setOnClickListener(new View.OnClickListener() {
+        TextInputEditText etUsername = view.findViewById(R.id.etUsername);
+        etUsername.setClickable(true);
+        TextInputEditText etEventName = view.findViewById(R.id.etEventName);
+        TextInputEditText etDescription = view.findViewById(R.id.etEventDescription);
+        TextInputEditText etLocation = view.findViewById(R.id.etLocation);
+        etUsername.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //showKeyboard(getActivity());
+                Log.i("Clicked","Clicked");
             }
-        });*/
+        });
         /*b=(Button)view.findViewById(R.id.btnSelectPhoto);
         viewImage=(ImageView)view.findViewById(R.id.viewImage);
         b.setOnClickListener(new View.OnClickListener() {
@@ -82,40 +89,44 @@ public class AddeventFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onAttachFragment(Fragment childFragment) {
+        super.onAttachFragment(childFragment);
+    }
+
     public static void showKeyboard(Context context) {
         ((InputMethodManager) (context).getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
+
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
     }
+
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
     }
+
     private void selectImage() {
 
-        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
+        final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Add Photo!");
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                if (options[item].equals("Take Photo"))
-                {
+                if (options[item].equals("Take Photo")) {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
                     startActivityForResult(intent, 1);
-                }
-                else if (options[item].equals("Choose from Gallery"))
-                {
-                    Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                } else if (options[item].equals("Choose from Gallery")) {
+                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(intent, 2);
 
-                }
-                else if (options[item].equals("Cancel")) {
+                } else if (options[item].equals("Cancel")) {
                     dialog.dismiss();
                 }
             }
@@ -124,8 +135,7 @@ public class AddeventFragment extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == 1) {
@@ -170,8 +180,8 @@ public class AddeventFragment extends Fragment {
             } else if (requestCode == 2) {
 
                 Uri selectedImage = data.getData();
-                String[] filePath = { MediaStore.Images.Media.DATA };
-                Cursor c = getActivity().getContentResolver().query(selectedImage,filePath, null, null, null);
+                String[] filePath = {MediaStore.Images.Media.DATA};
+                Cursor c = getActivity().getContentResolver().query(selectedImage, filePath, null, null, null);
                 c.moveToFirst();
                 int columnIndex = c.getColumnIndex(filePath[0]);
                 String picturePath = c.getString(columnIndex);

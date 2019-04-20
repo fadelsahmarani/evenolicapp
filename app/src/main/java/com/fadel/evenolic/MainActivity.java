@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String userType=getIntent().getStringExtra("usertype");
+        String userType = getIntent().getStringExtra("usertype");
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.drawer_layout);
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (userType.equals("planner")) {
             navigationView.inflateMenu(R.menu.activity_menu_planner);
-        }else{
+        } else {
             navigationView.inflateMenu(R.menu.activity_menu_user);
 
         }
@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new HomeFragment()).commit();
         }
-
 
 
     }
@@ -125,33 +124,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        if (id == R.id.add_Event) {
-
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container,new AddeventFragment());
-            transaction.addToBackStack(null);
-            transaction.commit();
-
-            /*Intent intent=new Intent(this,register.class);
-            startActivity(intent);*/
-        } else if (id == R.id.all_Event) {
-
-        } else if (id == R.id.logout_user) {
-            Intent intent=new Intent(this,login.class);
-            startActivity(intent);
+        switch (id) {
+            case R.id.add_Event:
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, new AddeventFragment());
+                transaction.addToBackStack(null);
+                transaction.commit();
+//                Intent intent=new Intent(this, register.class);
+//                startActivity(intent);
+                break;
+            case R.id.all_Event:
+                break;
+            case R.id.logout_user:
+                Intent intent = new Intent(this, login.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_slideshow:
+                break;
+            case R.id.nav_manage:
+                break;
+            case R.id.nav_share:
+                break;
+            case R.id.nav_send:
+                break;
+            default:
         }
-        else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
+        return false;
     }
-    }
+}
